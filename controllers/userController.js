@@ -5,7 +5,7 @@ var users = [];
 var user1 = user.createUser("Brian", "Gormanly", "brian.gormanly@marist.edu", "letmein");
 var user2 = user.createUser("Happy", "Gilmore", "happy.gilmore@gmail.com", "backnine");
 var user3 = user.createUser("Harry", "Truman", "htruman@wh.gov", "pres1");
-var user4 = new user("George", "Washinton", "gw@wh.gov", "pres2");
+var user4 = user.createUser("George", "Washinton", "gw@wh.gov", "pres2");
 users.push(user1);
 users.push(user2);
 users.push(user3);
@@ -17,7 +17,7 @@ exports.getUsers = function(req, res) {
 }
 
 exports.saveUser = function(req, res) {
-	var newUser = new user(req.body.firstName, req.body.lastName, req.body.email, req.body.password);
+	var newUser = user.createUser(req.body.firstName, req.body.lastName, req.body.email, req.body.password);
 	users.push(newUser);
 	res.setHeader('Content-Type', 'application/json');
 	res.send(req.body);
