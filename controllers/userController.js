@@ -1,26 +1,60 @@
 var user = require('../models/user')
 
-var users = [];
+const mysql = require('mysql2');
 
-var user1 = user.createUser("Brian", "Gormanly", "brian.gormanly@marist.edu", "letmein");
-var user2 = user.createUser("Happy", "Gilmore", "happy.gilmore@gmail.com", "backnine");
-var user3 = user.createUser("Harry", "Truman", "htruman@wh.gov", "pres1");
-var user4 = user.createUser("George", "Washinton", "gw@wh.gov", "pres2");
-users.push(user1);
-users.push(user2);
-users.push(user3);
-users.push(user4);
+const con = mysql.createConnection({
+	host: "localhost",
+	user: "'userDemoUser'",
+	password: "letmein!",
+	database: "demoDb"
+});
+
+con.connect((err) => {
+	if(err) throw err;
+	console.log("Database (mysql) connected!");
+
+	var sql = "use demoDb;";
+	con.query(sql, () => {
+		if(err) throw err;
+	})
+});
 
 exports.getUsers = function(req, res) {
-	res.setHeader('Content-Type', 'application/json');
-    res.send(users);
+	var users = [];
+
+	let sql = "select * from users;"
+	con.query(sql, (err, rows, fields) => {
+		if(err) throw err;
+		for(let i=0; i< rows.length; i++) {
+			let userRow = user.createUser(rows[i].firstName, rows[i].lastName, rows[i].email, rows[i].password);
+			users.push(userRow);
+		}
+
+		//console.log(users);
+
+		res.setHeader('Content-Type', 'application/json');
+		res.send(users);
+	});
+	
 }
 
 exports.saveUser = function(req, res) {
-	var newUser = user.createUser(req.body.firstName, req.body.lastName, req.body.email, req.body.password);
-	users.push(newUser);
-	res.setHeader('Content-Type', 'application/json');
-	res.send(req.body);
+	let sql = "insert into users (firstName, lastName, email, password) "
+		+ "values ('" 
+			+ req.body.firstName + "', '" 
+			+ req.body.lastName + "', '" 
+			+ req.body.email + "', '" 
+			+ req.body.password 
+		+ "');";
+	
+	con.query(sql, (err, result) => {
+		if(err) throw err;
+
+		//console.log(result);
+
+		res.setHeader('Content-Type', 'application/json');
+		res.send(result);
+	})
 }
 
 exports.getUser = function(req, res) {
