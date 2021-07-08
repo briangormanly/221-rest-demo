@@ -1,5 +1,6 @@
-var user = require('../models/user')
+// var user = require('../models/user')
 
+/*
 var users = [];
 
 var user1 = user.createUser("Brian", "Gormanly", "brian.gormanly@marist.edu", "letmein");
@@ -10,7 +11,9 @@ users.push(user1);
 users.push(user2);
 users.push(user3);
 users.push(user4);
+*/
 
+/*
 exports.getUsers = function(req, res) {
 	res.setHeader('Content-Type', 'application/json');
     res.send(users);
@@ -56,3 +59,4 @@ exports.updateUser = function(req, res) {
 	res.setHeader('Content-Type', 'application/json');
 	res.send(users[req.params.userId]);
 }
+*/
